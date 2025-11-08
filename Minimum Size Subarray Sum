@@ -52,38 +52,26 @@ public:
 approach-2 using sliding window
 T.C - O(N)
 class Solution {
-  public:
-    vector<int> firstNegInt(vector<int>& arr, int k) {
-        // write code here
-        int n = arr.size();
-        vector<int>result;
+public:
+    int minSubArrayLen(int target, vector<int>& nums) {
+
+        int n = nums.size();
         
-        deque<int>deq;
-        int i=0,j=0;
-        
+        int j =0,i=0;
+        int minL = INT_MAX;
+        int sum =0;
         while(j<n){
-            if(arr[j]<0){
-                deq.push_back(arr[j]);
-            }
-            // check if window size got
-            if(j-i+1 == k){
-                if(!deq.empty()){
-                    result.push_back(deq.front());
-                }
-                else
-                  result.push_back(0);
-                  
-                
-                // now time to shift i pointer
-                if(arr[i]<0 && !deq.empty()){
-                         deq.pop_front();
-                }
+            sum+= nums[j];
+
+            while(sum>=target){
+                minL = min(minL,j-i+1);
+
+                sum -= nums[i];
                 i++;
             }
             j++;
         }
-    return result;        
-        
+    return minL ==INT_MAX ? 0 : minL ;    
         
     }
 };
