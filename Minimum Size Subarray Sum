@@ -1,0 +1,51 @@
+appraoch-1 using binary search 
+T.C-o(N * LogN)
+class Solution {
+public:
+    bool isPossible(int maxl,vector<int>& presum,int target){
+        
+         int j =0;
+         int n = presum.size();
+         int sum =0;
+         while(j+maxl-1<n){
+            
+
+            sum = presum[maxl+j-1] - (j>0 ? presum[j-1] : 0);
+
+            if(sum>=target)
+             return true;
+
+             j++;  
+         }
+
+    return false;   
+    }
+
+    int minSubArrayLen(int target, vector<int>& nums) {
+          int n = nums.size();
+          vector<int>presum(n);
+
+          presum[0] = nums[0];
+
+          for(int i=1;i<n;i++){
+            presum[i] = presum[i-1] + nums[i];
+          }
+     
+        int l =1;
+        int r = n; // size of maximum subarray
+
+        int result =0;
+
+        while(l<=r){
+            int mid = (l+r)/2;
+
+            if(isPossible(mid,presum,target)){
+                result = mid;
+                r = mid-1; // minimize the answer
+            }
+            else
+             l = mid + 1;
+        }
+    return result;    
+    }
+};
