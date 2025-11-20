@@ -1,0 +1,65 @@
+class Solution {
+public:
+    int getState(int a,int b){
+        int parity_a = a%2;
+        int parity_b = b%2;
+
+        if(parity_a==0 && parity_b==0) return 0; // 00 state
+        if(parity_a==1 && parity_b==0) return 2;
+        if(parity_a==0 && parity_b==1) return 1;
+
+        return 3;
+    }
+    int maxDifference(string s, int k) {
+        int n = s.length();
+
+        int result  = INT_MIN;
+
+        for(char a = '0';a<='4';a++){
+            for(char b='0';b<='4';b++){
+                if(a==b) continue;
+
+                vector<int>StateMin_a_b(4,INT_MAX);
+
+                // count of a,b till index r 
+                int count_a =0;
+                int count_b = 0;
+
+                // count of a,b till index l
+                int prev_a = 0;
+                int prev_b  = 0;
+
+                int l  = -1;
+                int r = 0 ;
+
+                // starting sliding window
+                while(r<n){
+                    count_a += (s[r]==a) ? 1 : 0;
+                    count_b += (s[r]==b) ? 1 : 0;
+                    // srinking the window
+                    while(r-l >= k && count_b-prev_b>=2 && count_a-prev_a>=1){
+                        int leftstate = getState(prev_a,prev_b);
+                        // store the minimum 
+                        StateMin_a_b[leftstate] = min(StateMin_a_b[leftstate],prev_a-prev_b);
+
+                        l++;
+                        prev_a += (s[l]==a) ? 1 : 0;
+                        prev_b += (s[l]==b) ? 1 : 0;
+
+                    }
+
+                    int rightState = getState(count_a,count_b);
+                    int leftState = rightState ^ 2;
+                    int bestMindiff = StateMin_a_b[leftState];
+
+                    if(bestMindiff!=INT_MAX){
+                        result = max(result,count_a-count_b-bestMindiff);
+                    }
+                r++;
+                }
+            
+            }
+        }
+    return result;    
+    }
+};
