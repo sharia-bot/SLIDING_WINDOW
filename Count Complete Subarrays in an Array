@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int countCompleteSubarrays(vector<int>& nums) {
+
+        int n = nums.size();
+
+        unordered_set<int>st(begin(nums),end(nums));
+
+        int distinct_el = st.size();
+
+        unordered_map<int,int>mp;
+
+        int i=0;
+        int j=0;
+        int result =0;
+        while(j<n){
+            mp[nums[j]]++;
+
+            while(i<n && mp.size()==distinct_el){
+                 result+= (n-j);// bcz already got all distinct ele in array so add remaining all
+
+                 mp[nums[i]]--;
+                 if(mp[nums[i]] == 0){
+                    mp.erase(nums[i]);
+                 }
+                 i++;
+            }
+            j++;
+        }
+    return result;    
+        
+    }
+};
